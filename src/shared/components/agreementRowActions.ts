@@ -1,7 +1,7 @@
 import type { Agreement } from '../../domain/agreements.types'
 
 export type AvailableRowAction={id:'review-monthly'|'edit-exception'|'generate'|'refresh-di'|'confirm-kam'|'edit-real'|'attach-evidence'|'review-divergence'|'send-approval'|'view-approval'|'respond-adjustment'|'view-signature'|'view-payment'|'view-balance'|'history';label:string}
-export function getAvailableRowActions(agreement:Agreement,_currentUser:string):AvailableRowAction[]{
+export function getAvailableAgreementActions(agreement:Agreement,_currentUser:string):AvailableRowAction[]{
   const history:AvailableRowAction={id:'history',label:'Ver histórico'}
   switch(agreement.status){
     case'Pré-preenchido':return[{id:'review-monthly',label:'Conferir cadastro'},history]
@@ -22,3 +22,4 @@ export function getAvailableRowActions(agreement:Agreement,_currentUser:string):
     default:return[history]
   }
 }
+export const getAvailableRowActions=getAvailableAgreementActions

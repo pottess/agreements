@@ -1,13 +1,10 @@
 import { Navigate,Route,Routes } from 'react-router-dom'
 import { AppShell } from './AppShell'
 import { AnnualBreakdownPage } from '../features/annual-breakdown/AnnualBreakdownPage'
-import { MonthlyRegistrationPage } from '../features/monthly-registration/MonthlyRegistrationPage'
 import { MyAgreementsPage } from '../features/monthly-agreements/MyAgreementsPage'
-import { SettlementPage } from '../features/settlement/SettlementPage'
 import { ApprovalPage } from '../features/approval/ApprovalPage'
-import { SignaturePage } from '../features/signature/SignaturePage'
 import { PaymentPage } from '../features/payment/PaymentPage'
 import { DashboardPage } from '../features/dashboard/DashboardPage'
 import { AdministrationPage } from '../features/administration/AdministrationPage'
 import { AgreementDetailPage } from '../features/agreement-detail/AgreementDetailPage'
-export function AppRoutes(){return <Routes><Route element={<AppShell/>}><Route index element={<Navigate to="/meus-acordos" replace/>}/><Route path="meus-acordos" element={<MyAgreementsPage/>}/><Route path="acordos/:id" element={<AgreementDetailPage/>}/><Route path="desdobramento" element={<AnnualBreakdownPage/>}/><Route path="cadastro" element={<MonthlyRegistrationPage/>}/><Route path="apuracao" element={<SettlementPage/>}/><Route path="aprovacao" element={<ApprovalPage/>}/><Route path="assinatura" element={<SignaturePage/>}/><Route path="pagamento" element={<PaymentPage/>}/><Route path="dashboard" element={<DashboardPage/>}/><Route path="administracao" element={<AdministrationPage/>}/><Route path="*" element={<Navigate to="/meus-acordos" replace/>}/></Route></Routes>}
+export function AppRoutes(){return <Routes><Route element={<AppShell/>}><Route index element={<Navigate to="/meus-acordos" replace/>}/><Route path="meus-acordos" element={<MyAgreementsPage/>}/><Route path="acordos/:id" element={<AgreementDetailPage/>}/><Route path="desdobramento" element={<AnnualBreakdownPage/>}/><Route path="aprovacao" element={<ApprovalPage/>}/><Route path="pagamento" element={<PaymentPage/>}/><Route path="dashboard" element={<DashboardPage/>}/><Route path="administracao" element={<AdministrationPage/>}/><Route path="cadastro" element={<Navigate to="/meus-acordos" replace/>}/><Route path="cadastro-mensal" element={<Navigate to="/meus-acordos" replace/>}/><Route path="apuracao" element={<Navigate to="/meus-acordos" replace/>}/><Route path="assinatura" element={<Navigate to="/meus-acordos" replace/>}/><Route path="*" element={<Navigate to="/meus-acordos" replace/>}/></Route></Routes>}
