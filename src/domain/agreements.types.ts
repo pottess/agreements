@@ -1,4 +1,4 @@
-export type AutomationType = 'Automática DI' | 'Manual KAM' | 'Híbrida'
+export type AutomationType = 'DI' | 'Manual'
 export type AgreementType = 'service' | 'other'
 export type Stage = 'Cadastro' | 'Apuração' | 'Aprovação' | 'Assinatura' | 'Pagamento' | 'Finalizado'
 export type AgreementStatus = 'Pré-preenchido' | 'Conferido' | 'Exceção' | 'Manual pendente' | 'Apurado DI' | 'Com divergência' | 'Confirmado KAM' | 'Aguardando aprovação' | 'Aprovado' | 'Ajuste solicitado' | 'Aguardando assinatura' | 'Assinado' | 'Pagamento solicitado' | 'Pago' | 'Saldo em aberto'
@@ -13,7 +13,7 @@ export interface AppState { levers:Lever[]; agreements:Agreement[]; annualPublis
 export type Action =
   | {type:'PUBLISH_ANNUAL'} | {type:'SET_MONTH'; month:string} | {type:'SET_VIGENCIA'; year:number; month:number}
   | {type:'CONFIRM_MONTHLY'; ids:string[]} | {type:'SET_EXCEPTION'; id:string; budget:number; reason:string} | {type:'SET_TARGET'; id:string; value:number}
-  | {type:'GENERATE_AGREEMENTS'; ids:string[]} | {type:'SET_REAL_VALUE'; id:string; value:number}
+  | {type:'GENERATE_AGREEMENTS'; ids:string[]} | {type:'SET_REAL_VALUE'; id:string; value:number} | {type:'SET_APURADO_VALUE'; id:string; value:number}
   | {type:'CONFIRM_KAM'; ids:string[]} | {type:'SEND_APPROVAL'; ids:string[]}
   | {type:'PPM_DECISION'; ids:string[]; decision:'approve'|'reject'|'adjust'; value?:number}
   | {type:'SEND_SIGNATURE'; ids:string[]} | {type:'COMPLETE_SIGNATURE'; id:string}
