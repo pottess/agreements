@@ -6,7 +6,7 @@ import { Card, MetricCard } from '../../design-system/components/Card'
 import { DataTable, type Column } from '../../design-system/components/DataTable'
 import { Select } from '../../design-system/components/Fields'
 import { PageHeader } from '../../shared/components/PageHeader'
-import { BulkActionsBar, InlineCurrencyInput, InlineQualitativeInput, InlineTargetInput, TableToolbar } from '../../shared/components/TableParts'
+import { BulkActionsBar, InlineCurrencyInput, InlineOkToggle, InlineTargetInput, TableToolbar } from '../../shared/components/TableParts'
 import { AutomationTypeBadge, StatusBadge } from '../../shared/components/StatusBadge'
 import { RowActions } from '../../shared/components/RowActions'
 import { getAvailableAgreementActions, getAvailableBulkActions, type AgreementActionId } from '../../shared/components/agreementRowActions'
@@ -46,7 +46,7 @@ export function MyAgreementsPage() {
     { key: 'id', label: 'Acordo', render: agreement => <strong>{agreement.id}</strong> },
     { key: 'automation', label: 'Tipo de apuração', render: agreement => <AutomationTypeBadge type={agreement.automation}/> },
     { key: 'budget', label: 'Orçado', render: agreement => brl(agreement.budget) },
-    { key: 'measured', label: 'Apurado', render: agreement => agreement.measurementType === 'qualitative' && current ? <InlineQualitativeInput value={agreement.qualitativeResult} onSave={value => dispatch({type:'SET_QUALITATIVE_RESULT', id:agreement.id, value})}/> : agreement.automation === 'Manual' && current ? <InlineCurrencyInput value={agreement.diValue} onSave={value => dispatch({type:'SET_APURADO_VALUE', id:agreement.id, value})}/> : agreement.diValue === undefined ? <span>Aguardando DI</span> : brl(agreement.diValue) },
+    { key: 'measured', label: 'Apurado', render: agreement => agreement.measurementType === 'qualitative' && agreement.automation === 'Manual' && current ? <InlineOkToggle checked={agreement.qualitativeResult==='ok'} onToggle={checked => dispatch({type:'TOGGLE_QUALITATIVE_OK', id:agreement.id, checked})}/> : agreement.measurementType === 'qualitative' ? <span>{agreement.qualitativeResult==='ok'?'OK':agreement.qualitativeResult==='not_met'?'Não cumprido':'—'}</span> : agreement.automation === 'Manual' && current ? <InlineCurrencyInput value={agreement.diValue} onSave={value => dispatch({type:'SET_APURADO_VALUE', id:agreement.id, value})}/> : agreement.diValue === undefined ? <span>Aguardando DI</span> : brl(agreement.diValue) },
     { key: 'real', label: 'Real', render: agreement => current ? <InlineCurrencyInput value={agreement.realValue} onSave={value => dispatch({type:'SET_REAL_VALUE', id:agreement.id, value})}/> : <Tooltip label="Valor real disponível apenas no mês vigente."><span>{agreement.realValue === undefined ? '—' : brl(agreement.realValue)}</span></Tooltip> },
     { key: 'status', label: 'Status', render: agreement => <StatusBadge status={agreement.status}/> },
     { key: 'actions', label: 'Ações', align: 'center', compact: true, render: agreement => <RowActions onView={() => navigate(`/acordos/${agreement.id}`)} actions={getAvailableAgreementActions(agreement, currentKAM).map(action => ({...action, onClick: () => run(action.id, [agreement])}))}/> },
