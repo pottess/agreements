@@ -40,4 +40,4 @@ export const agreementsSeed:Agreement[] = [
   {...base('AC-0436',leversSeed[12],'Saldo em aberto','Pagamento',7100),realValue:7100,approvedValue:7100,paidValue:4000,sapDocument:'5100041631',sapStatus:'Processado'},
   {...base('AC-0437',leversSeed[13],'Pré-preenchido','Cadastro',12000)},
 ]
-export const initialState:AppState={levers:leversSeed,agreements:agreementsSeed,annualPublished:true,selectedMonth:'2026-03'}
+export const initialState:AppState={levers:leversSeed,agreements:agreementsSeed,annualPublished:true,selectedYear:2026,selectedMonth:'2026-07'}

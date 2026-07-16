@@ -7,9 +7,9 @@ export interface KamNextAction { label:string; type:KamActionType; enabled:boole
 
 export interface Lever { id:string; network:string; buyer:string; kam:string; category:string; name:string; automation:AutomationType; annualTarget:number; annualBudget:number; allocated:number; committed:number; paid:number; status:'Ativo'|'Pendente'|'Com erro'|'Inativo' }
 export interface Agreement { id:string; leverId:string; month:string; network:string; buyer:string; kam:string; ppm:string; lever:string; automation:AutomationType; plannedTarget:number; monthlyTarget:number; budget:number; diValue?:number; realValue?:number; proposedValue?:number; approvedValue?:number; paidValue?:number; stage:Stage; status:AgreementStatus; exceptionReason?:string; kamConfirmed?:string; ppmDecision?:string; signatureStatus?:string; sapDocument?:string; sapStatus?:string; evidence?:string; updatedAt:string }
-export interface AppState { levers:Lever[]; agreements:Agreement[]; annualPublished:boolean; selectedMonth:string; toast?:string }
+export interface AppState { levers:Lever[]; agreements:Agreement[]; annualPublished:boolean; selectedYear:number; selectedMonth:string; toast?:string }
 export type Action =
-  | {type:'PUBLISH_ANNUAL'} | {type:'SET_MONTH'; month:string}
+  | {type:'PUBLISH_ANNUAL'} | {type:'SET_MONTH'; month:string} | {type:'SET_VIGENCIA'; year:number; month:number}
   | {type:'CONFIRM_MONTHLY'; ids:string[]} | {type:'SET_EXCEPTION'; id:string; budget:number; reason:string}
   | {type:'GENERATE_AGREEMENTS'; ids:string[]} | {type:'SET_REAL_VALUE'; id:string; value:number}
   | {type:'CONFIRM_KAM'; ids:string[]} | {type:'SEND_APPROVAL'; ids:string[]}

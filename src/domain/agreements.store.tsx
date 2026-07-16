@@ -7,6 +7,7 @@ const update=(s:AppState,ids:string[],fn:(a:AppState['agreements'][number])=>App
 function reducer(s:AppState,a:Action):AppState{switch(a.type){
   case'PUBLISH_ANNUAL':return{...s,annualPublished:true,toast:'Matriz anual publicada com sucesso'}
   case'SET_MONTH':return{...s,selectedMonth:a.month}
+  case'SET_VIGENCIA':return{...s,selectedYear:a.year,selectedMonth:`${a.year}-${String(a.month).padStart(2,'0')}`}
   case'CONFIRM_MONTHLY':return{...update(s,a.ids,x=>({...x,status:'Conferido'})),toast:`${a.ids.length} item(ns) conferido(s)`}
   case'SET_EXCEPTION':return{...update(s,[a.id],x=>({...x,budget:a.budget,status:'Exceção',exceptionReason:a.reason})),toast:'Exceção registrada no histórico'}
   case'GENERATE_AGREEMENTS':return{...update(s,a.ids,x=>({...x,stage:'Apuração',status:x.automation==='Manual KAM'?'Manual pendente':'Apurado DI'})),toast:`${a.ids.length} acordo(s) gerado(s)`}
