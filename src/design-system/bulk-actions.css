@@ -1,0 +1,3 @@
+.bulk{min-height:48px;background:#e8f3f1;border-block:1px solid var(--border);color:var(--text)}
+.bulk strong{font-size:12px}.bulk .btn{background:var(--surface)}.bulk .btn-primary{background:var(--primary)}
+.bulk-clear{color:var(--muted)}.bulk-empty{font-size:11px;color:var(--muted)}
