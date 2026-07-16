@@ -7,7 +7,7 @@ export function getAvailableAgreementActions(agreement:Agreement,currentUser:str
  switch(agreement.status){
   case'in_settlement':return[{id:'adjust-data',label:'Ajustar dados'},{id:'remove-agreement',label:'Retirar acordo'}]
   case'waiting_di':return[{id:'refresh-di',label:'Atualizar DI'}]
-  case'di_settled':return[{id:'confirm-settlement',label:'Confirmar apuração'},{id:'send-approval',label:'Enviar para aprovação'}]
+  case'di_settled':return[{id:'send-approval',label:'Enviar para aprovação'}]
   case'manual_pending':return agreement.measurementType==='qualitative'&&agreement.qualitativeResult==='not_met'?[{id:'remove-agreement',label:'Retirar acordo'}]:agreement.measurementType==='qualitative'&&agreement.qualitativeResult==='ok'||agreement.measurementType==='quantitative'&&agreement.diValue!==undefined?[{id:'confirm-settlement',label:'Confirmar apuração'},{id:'remove-agreement',label:'Retirar acordo'}]:[{id:'inform-settlement',label:'Informar apurado'},{id:'remove-agreement',label:'Retirar acordo'}]
   case'adjustment_requested':return[{id:'respond-adjustment',label:'Responder ajuste'}]
   case'approved':return[{id:'send-signature',label:'Enviar para assinatura'}]
