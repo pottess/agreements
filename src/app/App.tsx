@@ -1,0 +1,2 @@
+import { useEffect } from 'react';import { useAgreements } from '../domain/agreements.store';import { Toast } from '../design-system/components/Feedback';import { AppRoutes } from './routes'
+export function App(){const{state,dispatch}=useAgreements();useEffect(()=>{if(!state.toast)return;const id=setTimeout(()=>dispatch({type:'TOAST'}),2800);return()=>clearTimeout(id)},[state.toast,dispatch]);return <><AppRoutes/>{state.toast&&<Toast message={state.toast}/>}</>}

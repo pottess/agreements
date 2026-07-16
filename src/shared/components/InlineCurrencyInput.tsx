@@ -1,0 +1,1 @@
+export { InlineCurrencyInput } from './TableParts'

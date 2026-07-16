@@ -1,0 +1,3 @@
+import { Badge } from '../../design-system/components/Badge';import type { AgreementStatus, AutomationType } from '../../domain/agreements.types'
+export function StatusBadge({status}:{status:AgreementStatus|string}){const tone=status.includes('Pago')||status.includes('Aprovado')||status.includes('Confirmado')||status==='Assinado'?'success':status.includes('divergência')||status.includes('Rejeitado')?'danger':status.includes('Aguardando')||status.includes('Pendente')?'warning':'info';return <Badge tone={tone}>{status}</Badge>}
+export function AutomationTypeBadge({type}:{type:AutomationType}){return <Badge tone={type==='Automática DI'?'success':type==='Híbrida'?'info':'neutral'}>{type}</Badge>}

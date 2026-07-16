@@ -1,0 +1,1 @@
+export { ConfirmOkButton } from './TableParts'
