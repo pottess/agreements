@@ -11,6 +11,10 @@ export const leversSeed: Lever[] = [
   ['L08','Arena Atacado','Bruno Alves','Bruno Alves','Cervejas','Backlight','Manual KAM',500,160000,160000,120000,40000,'Pendente'],
   ['L09','Bom Mercado','Carla Nunes','Ana Ribeiro','Logística','Automática DI',3000,410000,410000,300000,170000,'Ativo'],
   ['L10','Rede Extra','Ana Ribeiro','Juliana Silva','Não alcoólicas','Ação Spot','Manual KAM',300,90000,90000,45000,0,'Inativo'],
+  ['L11','Supermercados Aurora','Fernanda Melo','Diego Santos','Cervejas','Festival de Inverno','Automática DI',2100,360000,360000,240000,120000,'Ativo'],
+  ['L12','Supermercados Aurora','Fernanda Melo','Diego Santos','Não alcoólicas','Ilha de Refrigerantes','Híbrida',1400,250000,250000,150000,70000,'Ativo'],
+  ['L13','Rede Paulista','Gustavo Lima','Mariana Souza','Alimentos','Ponta de Gôndola','Manual KAM',1100,220000,220000,120000,30000,'Pendente'],
+  ['L14','Rede Paulista','Gustavo Lima','Mariana Souza','Cervejas','Encante Regional','Automática DI',1900,310000,310000,210000,100000,'Ativo'],
 ].map(([id,network,buyer,kam,category,name,automation,annualTarget,annualBudget,allocated,committed,paid,status])=>({id,network,buyer,kam,category,name,automation,annualTarget,annualBudget,allocated,committed,paid,status} as Lever))
 
 const base = (id:string, lever:Lever, status:Agreement['status'], stage:Agreement['stage'], budget:number):Agreement => ({id,leverId:lever.id,month:'2026-03',network:lever.network,buyer:lever.buyer,kam:lever.kam,ppm:id.charCodeAt(id.length-1)%2?'Mariana Costa':'Roberto Lima',lever:lever.name,automation:lever.automation,plannedTarget:lever.annualTarget/12,monthlyTarget:lever.annualTarget/12,budget,stage,status,updatedAt:'Hoje, 10:42'})
@@ -27,5 +31,13 @@ export const agreementsSeed:Agreement[] = [
   {...base('AC-0427',leversSeed[9],'Saldo em aberto','Pagamento',9000),realValue:9000,approvedValue:9000,paidValue:5000,sapDocument:'5100041520',sapStatus:'Processado'},
   {...base('AC-0428',leversSeed[0],'Pré-preenchido','Cadastro',20000)},
   {...base('AC-0429',leversSeed[1],'Exceção','Cadastro',16500),exceptionReason:'Meta revisada pela rede'},
+  {...base('AC-0430',leversSeed[10],'Apurado DI','Apuração',14200),diValue:14200},
+  {...base('AC-0431',leversSeed[11],'Com divergência','Apuração',10800),diValue:7200,realValue:2800},
+  {...base('AC-0432',leversSeed[12],'Manual pendente','Apuração',7600)},
+  {...base('AC-0433',leversSeed[13],'Aguardando aprovação','Aprovação',12500),diValue:12500,kamConfirmed:'Mariana Souza · hoje 11:05'},
+  {...base('AC-0434',leversSeed[10],'Confirmado KAM','Apuração',11600),diValue:11600,kamConfirmed:'Diego Santos · hoje 11:16'},
+  {...base('AC-0435',leversSeed[11],'Aprovado','Assinatura',9800),diValue:7000,realValue:2800,approvedValue:9800},
+  {...base('AC-0436',leversSeed[12],'Saldo em aberto','Pagamento',7100),realValue:7100,approvedValue:7100,paidValue:4000,sapDocument:'5100041631',sapStatus:'Processado'},
+  {...base('AC-0437',leversSeed[13],'Pré-preenchido','Cadastro',12000)},
 ]
 export const initialState:AppState={levers:leversSeed,agreements:agreementsSeed,annualPublished:true,selectedMonth:'2026-03'}
