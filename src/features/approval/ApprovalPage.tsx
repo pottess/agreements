@@ -23,7 +23,7 @@ export function ApprovalPage() {
   const operationalBulkActions = bulkActions.filter(action => action.id !== 'export')
   const toggle = (id:string) => setSelected(items => items.includes(id) ? items.filter(item => item !== id) : [...items, id])
   const run = (actionId: AgreementActionId, agreements: Agreement[]) => {
-    if (actionId === 'history' || actionId.startsWith('view-')) { setDetail(agreements[0]); return }
+    if (actionId.startsWith('refresh-')) { setDetail(agreements[0]); return }
     dispatch({type:'EXECUTE_AGREEMENT_ACTION', ids:agreements.map(agreement => agreement.id), actionId, user:'PPM'})
     if (agreements.length >= 2) setSelected([])
   }
@@ -39,7 +39,7 @@ export function ApprovalPage() {
     {key:'actions', label:'Ações', align:'center', compact:true, render:agreement => <RowActions onView={() => setDetail(agreement)} actions={getAvailableAgreementActions(agreement, 'PPM').map(action => ({...action, onClick:() => run(action.id, [agreement])}))}/>},
   ]
   return <div className="page"><PageHeader title="Aprovação" description="Aprove, rejeite ou solicite ajustes nos acordos confirmados pelo KAM."/>
-    <div className="metrics"><MetricCard label="Aguardando aprovação" value={String(rows.length)}/><MetricCard label="Valor orçado" value={brl(rows.reduce((total, agreement) => total + agreement.budget, 0))}/><MetricCard label="Valor apurado" value={brl(rows.reduce((total, agreement) => total + (agreement.diValue ?? 0) + (agreement.realValue ?? 0), 0))}/><MetricCard label="Valor proposto" value={brl(rows.reduce((total, agreement) => total + (agreement.proposedValue ?? agreement.budget), 0))}/><MetricCard label="Rejeições / ajustes" value={String(rows.filter(agreement => agreement.status === 'Ajuste solicitado').length)}/></div>
+    <div className="metrics"><MetricCard label="Aguardando aprovação" value={String(rows.length)}/><MetricCard label="Valor orçado" value={brl(rows.reduce((total, agreement) => total + agreement.budget, 0))}/><MetricCard label="Valor apurado" value={brl(rows.reduce((total, agreement) => total + (agreement.diValue ?? 0) + (agreement.realValue ?? 0), 0))}/><MetricCard label="Valor proposto" value={brl(rows.reduce((total, agreement) => total + (agreement.proposedValue ?? agreement.budget), 0))}/><MetricCard label="Rejeições / ajustes" value={String(rows.filter(agreement => agreement.status === 'adjustment_requested').length)}/></div>
     <Card><TableToolbar search={search} onSearch={setSearch}/><BulkActionsBar count={selectedRows.length} onClear={() => setSelected([])} emptyMessage="Os acordos selecionados possuem status diferentes e não permitem a mesma ação em massa."><>{operationalBulkActions.length ? operationalBulkActions.filter(action => ['approve', 'reject', 'request-adjustment'].includes(action.id)).slice(0, 3).map(action => <Button key={action.id} size="sm" variant={action.id === 'reject' ? 'danger' : 'secondary'} onClick={() => run(action.id, selectedRows)}>{action.label}</Button>) : <span className="bulk-empty">Os acordos selecionados possuem status diferentes e não permitem a mesma ação em massa.</span>}<Button size="sm" variant="tertiary" onClick={() => run('export', selectedRows)}>Exportar selecionados</Button></></BulkActionsBar><DataTable rows={rows} columns={columns} selected={selected} onToggle={toggle} onToggleAll={() => setSelected(selected.length === rows.length ? [] : rows.map(row => row.id))}/></Card>
     {detail && <DetailDrawer agreement={detail} onClose={() => setDetail(undefined)}/>}</div>
 }

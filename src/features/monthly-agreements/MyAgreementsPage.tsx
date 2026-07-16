@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../design-system/components/Button'
+import { Modal } from '../../design-system/components/Modal'
 import { Card, MetricCard } from '../../design-system/components/Card'
 import { DataTable, type Column } from '../../design-system/components/DataTable'
 import { Select } from '../../design-system/components/Fields'
@@ -21,16 +22,16 @@ export function MyAgreementsPage() {
   const [search, setSearch] = useState('')
   const [automation, setAutomation] = useState('Todos')
   const [selected, setSelected] = useState<string[]>([])
+  const [signing, setSigning] = useState<Agreement[]>()
   const current = state.selectedMonth === '2026-07'
   const all = sortAgreementsByNetwork(selectAgreementsByVigencia(state))
   const rows = useMemo(() => all.filter(agreement => (automation === 'Todos' || agreement.automation === automation) && (agreement.network + agreement.buyer + agreement.lever + agreement.leverObservation + agreement.id).toLowerCase().includes(search.toLowerCase())), [all, automation, search])
   const selectedRows = rows.filter(agreement => selected.includes(agreement.id))
   const bulkActions = getAvailableBulkActions(selectedRows, 'KAM')
-  const operationalBulkActions = bulkActions.filter(action => action.id !== 'export')
   const toggle = (id: string) => setSelected(items => items.includes(id) ? items.filter(item => item !== id) : [...items, id])
   const run = (actionId: AgreementActionId, agreements: Agreement[]) => {
-    if (actionId === 'history' || actionId.startsWith('view-')) { navigate(`/acordos/${agreements[0].id}`); return }
-    if (['edit-real', 'edit-exception', 'attach-evidence', 'review-divergence', 'respond-adjustment'].includes(actionId)) { navigate(`/acordos/${agreements[0].id}`); return }
+    if (actionId === 'sign-agreement') { setSigning(agreements); return }
+    if (['adjust-data','inform-settlement','edit-settlement','respond-adjustment'].includes(actionId)) { navigate(`/acordos/${agreements[0].id}`); return }
     dispatch({ type: 'EXECUTE_AGREEMENT_ACTION', ids: agreements.map(agreement => agreement.id), actionId, user: 'KAM' })
     if (agreements.length >= 2) setSelected([])
   }
@@ -50,12 +51,13 @@ export function MyAgreementsPage() {
   ]
   return <div className="page">
     <PageHeader title="Acordos" description="Consulte, acompanhe e atue nos acordos comerciais conforme o status." rightSlot={<VigenciaSelect/>}/>
-    <div className="metrics"><MetricCard label="Total no mês" value={String(all.length)}/><MetricCard label="DI" value={String(all.filter(agreement => agreement.automation === 'DI').length)}/><MetricCard label="Manual" value={String(all.filter(agreement => agreement.automation === 'Manual').length)}/><MetricCard label="Pendências" value={String(all.filter(agreement => ['Manual pendente', 'Com divergência'].includes(agreement.status)).length)}/><MetricCard label="Concluídos" value={String(all.filter(agreement => agreement.status === 'Pago').length)}/></div>
+    <div className="metrics"><MetricCard label="Total no mês" value={String(all.length)}/><MetricCard label="Em apuração" value={String(all.filter(agreement => ['in_settlement','waiting_di'].includes(agreement.status)).length)}/><MetricCard label="Pendentes KAM" value={String(all.filter(agreement => ['manual_pending','manual_value_informed','di_settled','settled_by_kam'].includes(agreement.status)).length)}/><MetricCard label="Em aprovação" value={String(all.filter(agreement => agreement.status === 'waiting_approval').length)}/><MetricCard label="Aguardando assinatura" value={String(all.filter(agreement => agreement.status === 'waiting_signature').length)}/><MetricCard label="Concluídos" value={String(all.filter(agreement => ['paid','finished'].includes(agreement.status)).length)}/></div>
     <Card><TableToolbar search={search} onSearch={setSearch} actions={<Button size="sm" variant="tertiary">⇩ Exportar</Button>}><Select label="Tipo de apuração" value={automation} onChange={event => setAutomation(event.target.value)}><option>Todos</option><option>DI</option><option>Manual</option></Select></TableToolbar>
       <BulkActionsBar count={selectedRows.length} onClear={() => setSelected([])} emptyMessage="Os acordos selecionados possuem status diferentes e não permitem a mesma ação em massa.">
-        <>{operationalBulkActions.length ? operationalBulkActions.slice(0, 2).map(action => <Button key={action.id} size="sm" variant="secondary" onClick={() => run(action.id, selectedRows)}>{action.label}</Button>) : <span className="bulk-empty">Os acordos selecionados possuem status diferentes e não permitem a mesma ação em massa.</span>}<Button size="sm" variant="tertiary" onClick={() => run('export', selectedRows)}>Exportar selecionados</Button>{operationalBulkActions.length > 2 && <Button size="sm" variant="tertiary" onClick={() => dispatch({type:'TOAST', message:'Ações adicionais disponíveis no menu de cada acordo.'})}>Mais ações ⋮</Button>}</>
+        {bulkActions.length ? <>{bulkActions.slice(0, 2).map(action => <Button key={action.id} size="sm" variant="secondary" onClick={() => run(action.id, selectedRows)}>{action.label}</Button>)}{bulkActions.length > 2 && <Button size="sm" variant="tertiary" onClick={() => dispatch({type:'TOAST', message:'Ações adicionais disponíveis no menu de cada acordo.'})}>Mais ações ⋮</Button>}</> : undefined}
       </BulkActionsBar>
       <DataTable rows={rows} columns={columns} selected={selected} onToggle={toggle} onToggleAll={() => setSelected(selected.length === rows.length ? [] : rows.map(row => row.id))}/>
     </Card>
+    {signing && <Modal title={signing.length === 1 ? 'Assinar acordo' : 'Assinar acordos'} onClose={() => setSigning(undefined)} actions={<><Button variant="tertiary" onClick={() => setSigning(undefined)}>Cancelar</Button><Button onClick={() => { dispatch({type:'EXECUTE_AGREEMENT_ACTION',ids:signing.map(agreement => agreement.id),actionId:'sign-agreement',user:'KAM'}); setSelected([]); setSigning(undefined) }}>{signing.length === 1 ? 'Confirmar assinatura' : 'Confirmar assinaturas'}</Button></>}><p>{signing.length === 1 ? 'Tem certeza que deseja assinar este acordo?' : `Tem certeza que deseja assinar os ${signing.length} acordos selecionados?`}</p></Modal>}
   </div>
 }
