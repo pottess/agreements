@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useReducer, type ReactNo
 import { initialState } from './agreements.seed'
 import type { Action, AppState } from './agreements.types'
 
-const storageKey='agreements-spa-state-v4'
+const storageKey='agreements-spa-state-v5'
 const update=(s:AppState,ids:string[],fn:(a:AppState['agreements'][number])=>AppState['agreements'][number])=>({...s,agreements:s.agreements.map(a=>ids.includes(a.id)?fn(a):a)})
 function reducer(s:AppState,a:Action):AppState{switch(a.type){
   case'PUBLISH_ANNUAL':return{...s,annualPublished:true,toast:'Matriz anual publicada com sucesso'}
