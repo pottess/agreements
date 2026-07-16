@@ -5,6 +5,7 @@ import { App } from './app/App'
 import { AgreementsProvider } from './domain/agreements.store'
 import './design-system/tokens.css'
 import './design-system/global.css'
+import './design-system/actions.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
