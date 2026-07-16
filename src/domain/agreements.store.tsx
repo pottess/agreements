@@ -10,7 +10,7 @@ function reducer(s:AppState,a:Action):AppState{switch(a.type){
   case'CONFIRM_MONTHLY':return{...update(s,a.ids,x=>({...x,status:'Conferido'})),toast:`${a.ids.length} item(ns) conferido(s)`}
   case'SET_EXCEPTION':return{...update(s,[a.id],x=>({...x,budget:a.budget,status:'Exceção',exceptionReason:a.reason})),toast:'Exceção registrada no histórico'}
   case'GENERATE_AGREEMENTS':return{...update(s,a.ids,x=>({...x,stage:'Apuração',status:x.automation==='Manual KAM'?'Manual pendente':'Apurado DI'})),toast:`${a.ids.length} acordo(s) gerado(s)`}
-  case'SET_REAL_VALUE':return{...update(s,[a.id],x=>({...x,realValue:a.value,status:'Com divergência'})),toast:'Valor real salvo'}
+  case'SET_REAL_VALUE':return{...update(s,[a.id],x=>({...x,realValue:a.value,status:'Com divergência',updatedAt:'Agora · valor real atualizado pelo KAM'})),toast:'Valor real salvo e registrado no histórico'}
   case'CONFIRM_KAM':return{...update(s,a.ids,x=>({...x,status:'Confirmado KAM',kamConfirmed:`${x.kam} · agora`})),toast:'Apuração confirmada pelo KAM'}
   case'SEND_APPROVAL':return{...update(s,a.ids,x=>({...x,stage:'Aprovação',status:'Aguardando aprovação',proposedValue:x.diValue??x.realValue??x.budget})),toast:'Itens enviados para aprovação'}
   case'PPM_DECISION':return{...update(s,a.ids,x=>a.decision==='approve'?({...x,stage:'Assinatura',status:'Aprovado',approvedValue:a.value??x.proposedValue??x.budget,ppmDecision:'Aprovado agora'}):a.decision==='adjust'?({...x,status:'Ajuste solicitado'}):({...x,status:'Com divergência',ppmDecision:'Rejeitado'})),toast:'Decisão PPM registrada'}
