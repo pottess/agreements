@@ -9,6 +9,7 @@ import './design-system/actions.css'
 import './design-system/layout.css'
 import './design-system/toolbar.css'
 import './design-system/vigencia.css'
+import './design-system/detail.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
